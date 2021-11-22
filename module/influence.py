@@ -1,7 +1,8 @@
 from math import pow, sqrt
 from config import Config
 from filter import IsInteresting
-from sheet import PostUpdate
+from sheet import PostUpdate as sheetPostUpdate
+from db import PostUpdate as dbPostUpdate
 import re
 
 # Logger instance used by the functions in this module
@@ -45,7 +46,6 @@ def ConsumeFSDJump(event):
     timestamp = event["timestamp"]
     eventDate = timestamp[0:10]
     eventTime = timestamp[11:19]
-
     # Nothing else below here guaranteed to be available
     systemFaction = event.get("SystemFaction", "")
     systemAllegiance = event.get("SystemAllegiance", "")
@@ -95,7 +95,8 @@ def ConsumeFSDJump(event):
         if len(systemEconomy) > 0 and _MATCH_ECO.match(systemEconomy) is not None:
             update["SystemEconomy"] = _MATCH_ECO.match(systemEconomy).group(1)
         # Send the update
-        PostUpdate(update, factionList)
+        sheetPostUpdate(update, factionList)
+        dbPostUpdate(update, factionList)
 
 def CreateUpdate(timestamp, starName, systemFaction, factionList):
     """Formats the information for the upload to the Google Sheet."""
@@ -111,6 +112,7 @@ def CreateUpdate(timestamp, starName, systemFaction, factionList):
             continue
         prefix = "Faction{:d}".format(factionNo)
         data[prefix+"Name"] = faction["Name"]
+        
         data[prefix+"Influence"] = faction["Influence"]
         data[prefix+"State"] = faction["FactionState"]
         data[prefix+"Allegiance"] = faction["Allegiance"]

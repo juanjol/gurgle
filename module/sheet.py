@@ -13,8 +13,8 @@ __SHEET_URL = Config.getRequiredString('sheet', 'url')
 __SHEET_API_KEY = Config.getCrypt('sheet', 'apikey')
 __SHEET_RETRIES = Config.getInteger('sheet', 'retries', 3)
 __SHEET_RETRY_WAIT = Config.getInteger('sheet', 'retry_wait', 3)
-__SHEET_TIMEOUT = Config.getInteger('sheet', 'timeout', 10)
-__SHEET_RESPONSE_BUFFER = Config.getInteger('sheet', 'buffer', 1024)
+__SHEET_TIMEOUT = Config.getInteger('sheet', 'timeout', 100)
+__SHEET_RESPONSE_BUFFER = Config.getInteger('sheet', 'buffer', 4096)
 
 
 def PostUpdate(update, factionList):
